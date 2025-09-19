@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 body {
-  @apply bg-[#1B1B1B] text-[#E3E3E3];
+  @apply bg-[#fff] text-[#000];
 }
 
 .base-wrapper {

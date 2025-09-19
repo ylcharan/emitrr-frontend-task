@@ -1,44 +1,51 @@
-import { CheckCircle, CircleFadingArrowUp, Circle } from "lucide-react";
-import TaskCards from "./components/TaskCards";
+import BoardViewCol from "./components/BoardViewCol";
+import { dummyData } from "./data/dummyData";
+import type { Column } from "./data/types";
 
 function App() {
+  const data = dummyData;
   return (
     <div className="base-wrapper ">
       <h1 className="text-2xl">Board View</h1>
-      <div className="grid grid-cols-3 gap-4 mt-10">
-        <div className="flex flex-col gap-4">
-          <div className="flex items-center gap-2 text-gray-500">
-            <Circle className="w-6 h-6" />
-            To Do
+      <div className="grid grid-cols-3 gap-10 mt-10">
+        {data.map((column: Column) => (
+          <BoardViewCol key={column.id} column={column} />
+        ))}
+
+        {/* <div className="flex flex-col gap-4 bg-[#F6F8FA] p-4 rounded-md">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+              In Progress
+            </div>
+            <div className="flex items-center gap-2">
+              <Ellipsis />
+              <Plus />
+            </div>
           </div>
-          <div className="flex flex-col gap-2">
-            <TaskCards />
-            <TaskCards />
-            <TaskCards />
-          </div>
-        </div>
-        <div className="flex flex-col gap-4">
-          <div className="flex items-center gap-2 text-yellow-500">
-            <CircleFadingArrowUp className="w-6 h-6" />
-            In Progress
-          </div>
-          <div className="flex flex-col gap-2">
-            <TaskCards />
-            <TaskCards />
-            <TaskCards />
-          </div>
-        </div>
-        <div className="flex flex-col gap-4">
-          <div className="flex items-center gap-2 text-green-500">
-            <CheckCircle className="w-6 h-6" />
-            Done
-          </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-3">
             <TaskCards />
             <TaskCards />
             <TaskCards />
           </div>
         </div>
+        <div className="flex flex-col gap-4 bg-[#F6F8FA] p-4 rounded-md">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+              Done
+            </div>
+            <div className="flex items-center gap-2">
+              <Ellipsis />
+              <Plus />
+            </div>
+          </div>
+          <div className="flex flex-col gap-3">
+            <TaskCards />
+            <TaskCards />
+            <TaskCards />
+          </div>
+        </div> */}
       </div>
     </div>
   );
