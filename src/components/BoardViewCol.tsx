@@ -3,6 +3,10 @@
 import { Ellipsis, Plus } from "lucide-react";
 import TaskCards from "./TaskCards";
 import type { Column } from "../data/types";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 
 const BoardViewCol = ({ column }: { column: Column }) => {
   return (
@@ -29,9 +33,14 @@ const BoardViewCol = ({ column }: { column: Column }) => {
         </div>
       </div>
       <div className="flex flex-col gap-3">
-        {column.tasks.map((task) => (
-          <TaskCards key={task.id} task={task} />
-        ))}
+        <SortableContext
+          items={column.tasks}
+          strategy={verticalListSortingStrategy}
+        >
+          {column.tasks.map((task) => (
+            <TaskCards key={task.id} task={task} />
+          ))}
+        </SortableContext>
       </div>
     </div>
   );

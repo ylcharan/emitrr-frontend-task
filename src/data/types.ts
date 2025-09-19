@@ -15,3 +15,11 @@ export interface Column {
   title: string;
   tasks: Task[];
 }
+
+export type TaskContextType = {
+  columns: Column[];
+  addTask: (columnId: string, task: Task) => void;
+  moveTask: (taskId: string, fromId: string, toId: string) => void;
+  getTaskColumn: (columns: Column[], taskId: string) => string;
+  getTaskPosition: (tasks: Task[], taskId: string) => number;
+};

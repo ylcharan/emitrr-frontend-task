@@ -1,16 +1,32 @@
 import BoardViewCol from "./components/BoardViewCol";
-import { dummyData } from "./data/dummyData";
+import { useTaskContext } from "./context/TaskContext";
 import type { Column } from "./data/types";
+import { DndContext, closestCorners } from "@dnd-kit/core";
 
 function App() {
-  const data = dummyData;
+  const { columns, moveTask, getTaskColumn } = useTaskContext();
+
   return (
     <div className="base-wrapper ">
       <h1 className="text-2xl">Board View</h1>
-      <div className="grid grid-cols-3 gap-10 mt-10">
-        {data.map((column: Column) => (
-          <BoardViewCol key={column.id} column={column} />
-        ))}
+      <DndContext
+        onDragEnd={(event) => {
+          const { active, over } = event;
+          console.log(event);
+          if (active.id === over?.id) return;
+          moveTask(
+            getTaskColumn(columns, active.id as string),
+            active.id as string,
+            over?.id as string
+          );
+        }}
+        collisionDetection={closestCorners}
+      >
+        <div className="grid grid-cols-3 gap-10 mt-10">
+          {columns.map((column: Column) =>
+            column ? <BoardViewCol key={column.id} column={column} /> : null
+          )}
+        </div>
 
         {/* <div className="flex flex-col gap-4 bg-[#F6F8FA] p-4 rounded-md">
           <div className="flex items-center justify-between">
@@ -46,7 +62,7 @@ function App() {
             <TaskCards />
           </div>
         </div> */}
-      </div>
+      </DndContext>
     </div>
   );
 }

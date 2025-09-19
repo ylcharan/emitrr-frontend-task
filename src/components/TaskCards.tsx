@@ -2,10 +2,25 @@
 // @ts-expect-error
 import { Ellipsis, Flag } from "lucide-react";
 import type { Task } from "../data/types";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 const TaskCards = ({ task }: { task: Task }) => {
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: task.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
   return (
-    <div className="border p-4 rounded-md w-full bg-[#fff] gap-1 border-gray-200">
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      className="border p-4 rounded-md w-full bg-[#fff] gap-1 border-gray-200"
+    >
       <div className="flex items-center justify-between">
         <span className="bg-slate-100 text-slate-950 text-[12px] px-2 py-0.5 rounded-md uppercase flex items-center gap-1">
           <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
