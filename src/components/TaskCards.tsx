@@ -1,5 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
 import { Ellipsis, Flag } from "lucide-react";
 import type { Task } from "../data/types";
 import { useSortable } from "@dnd-kit/sortable";

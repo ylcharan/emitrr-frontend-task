@@ -1,5 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
 import { Ellipsis, Plus } from "lucide-react";
 import TaskCards from "./TaskCards";
 import type { Column } from "../data/types";
