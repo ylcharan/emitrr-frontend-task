@@ -9,8 +9,23 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
 
   const getCols = () => columns;
 
-  const setCols = (cols: Column[]) => {
-    setColumns(cols);
+  const setCols = (task: Task, taskId: string) => {
+    setColumns((prevCols) =>
+      prevCols.map((col) => {
+        if (col.id === taskId) {
+          return {
+            ...col,
+            tasks: col.tasks.map((t) => {
+              if (t.id === task.id) {
+                return { ...task };
+              }
+              return t;
+            }),
+          };
+        }
+        return col;
+      })
+    );
   };
 
   const addTask = (columnId: string, task: Task) => {

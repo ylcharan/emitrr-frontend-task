@@ -14,9 +14,16 @@ const TaskCards = ({ task, colId }: { task?: Task; colId: string }) => {
     transition,
     isDragging,
   } = useSortable({ id: task?.id || colId });
-  const { deleteTask, getCols } = useTaskContext();
+  const { deleteTask, setCols } = useTaskContext();
   const [isEditorOpen, setIsEditorOpen] = useState(false);
-  const [isEditorId, setIsEditorId] = useState<string | null>(null);
+  const [newTask, setNewTask] = useState<Task>({
+    id: task?.id ?? "",
+    title: task?.title ?? "",
+    description: task?.description ?? "",
+    createdBy: task?.createdBy ?? "",
+    priority: task?.priority ?? "Low",
+    dueDate: task?.dueDate ?? "",
+  });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -44,8 +51,7 @@ const TaskCards = ({ task, colId }: { task?: Task; colId: string }) => {
             <div className="absolute right-0 top-0 flex items-center gap-2">
               <button
                 onClick={() => {
-                  setIsEditorOpen(true);
-                  setIsEditorId(task.id);
+                  setIsEditorOpen(!isEditorOpen);
                 }}
                 className="cursor-pointer"
               >
@@ -54,7 +60,6 @@ const TaskCards = ({ task, colId }: { task?: Task; colId: string }) => {
               <button
                 onClick={() => {
                   deleteTask(task.id);
-                  console.log(getCols());
                 }}
                 className="cursor-pointer"
               >
@@ -65,27 +70,91 @@ const TaskCards = ({ task, colId }: { task?: Task; colId: string }) => {
               </div>
             </div>
           </div>
-          <div className="flex items-center justify-between">
-            <h1 className="text-[18px] text-black mt-2">{task?.title}</h1>
-          </div>
-          <p className="text-gray-400 text-[14px]">{task?.description}</p>
-          <div className="flex items-center justify-between mt-1">
-            <div className="text-gray-400 text-[12px] flex items-center">
-              <Flag className="mr-1 w-3 h-3" />
-              {task?.dueDate}
-            </div>
-            <span
-              className={`${
-                task?.priority === "High"
-                  ? "bg-red-50 text-red-500"
-                  : task?.priority === "Medium"
-                  ? "bg-yellow-50 text-yellow-500"
-                  : "bg-green-50 text-green-500"
-              } text-[12px] px-2 py-0.5 rounded-full`}
-            >
-              {task?.priority}
-            </span>
-          </div>
+          {!isEditorOpen ? (
+            <>
+              <div className="flex items-center justify-between">
+                <h1 className="text-[18px] text-black mt-2">{task?.title}</h1>
+              </div>
+              <p className="text-gray-400 text-[14px]">{task?.description}</p>
+              <div className="flex items-center justify-between mt-1">
+                <div className="text-gray-400 text-[12px] flex items-center">
+                  <Flag className="mr-1 w-3 h-3" />
+                  {task?.dueDate}
+                </div>
+                <span
+                  className={`${
+                    task?.priority === "High"
+                      ? "bg-red-50 text-red-500"
+                      : task?.priority === "Medium"
+                      ? "bg-yellow-50 text-yellow-500"
+                      : "bg-green-50 text-green-500"
+                  } text-[12px] px-2 py-0.5 rounded-full`}
+                >
+                  {task?.priority}
+                </span>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="flex gap-2 items-center mt-2">
+                <span className="text-[12px] text-black">title:</span>
+                <input
+                  value={newTask?.title}
+                  onChange={(e) => {
+                    setNewTask({ ...newTask, title: e.target.value });
+                  }}
+                  className="text-[14px] border-1 px-2 rounded-sm"
+                />
+              </div>
+              <div className="flex flex-col gap-1 items-left mt-2">
+                <span className="text-[12px] text-black">description:</span>
+                <textarea
+                  value={newTask?.description}
+                  onChange={(e) => {
+                    setNewTask({ ...newTask, description: e.target.value });
+                  }}
+                  className="text-[14px] border-1 px-2 rounded-sm"
+                />
+              </div>
+              <div className="flex items-center justify-between mt-3">
+                <div className="text-gray-400 text-[12px] flex items-center gap-2">
+                  <span className="text-[12px] text-black">date:</span>
+                  <input
+                    type="date"
+                    value={newTask?.dueDate}
+                    onChange={(e) =>
+                      setNewTask({ ...newTask, dueDate: e.target.value })
+                    }
+                    className="text-[14px] border-1 px-2 rounded-sm border-black text-black"
+                  />
+                </div>
+                <select
+                  id="priority"
+                  name="selectPriority"
+                  value={newTask.priority}
+                  onChange={(e) => {
+                    setNewTask({
+                      ...newTask,
+                      priority: e.target.value as Task["priority"],
+                    });
+                  }}
+                >
+                  <option value="High">High</option>
+                  <option value="Medium">Medium</option>
+                  <option value="Low">Low</option>
+                </select>
+              </div>
+              <button
+                className="bg-blue-500 text-white w-full py-1 mt-3 rounded-sm cursor-pointer"
+                onClick={() => {
+                  setCols(newTask, task.id);
+                  setIsEditorOpen(false);
+                }}
+              >
+                Save
+              </button>
+            </>
+          )}
         </>
       )}
     </div>

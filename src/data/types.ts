@@ -27,6 +27,6 @@ export type TaskContextType = {
   ) => void;
   getTaskColumn: (columns: Column[], taskId: string) => string;
   getCols: () => Column[];
-  setCols: (cols: Column[]) => void;
+  setCols: (task: Task, taskId: string) => void;
   deleteTask: (taskId: string) => void;
 };
