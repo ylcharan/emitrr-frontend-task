@@ -57,7 +57,9 @@ const BoardViewCol = ({ column }: { column: Column }) => {
           >
             Priority
           </button>
-          <Plus />
+          <button className="text-gray-400 cursor-pointer">
+            <Plus />
+          </button>
         </div>
       </div>
       <div className="flex flex-col gap-3">

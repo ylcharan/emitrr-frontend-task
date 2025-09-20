@@ -28,7 +28,7 @@ const TaskCards = ({ task, colId }: { task?: Task; colId: string }) => {
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-    zIndex: isDragging ? 999 : 0,
+    zIndex: isDragging ? 999999999 : 0,
   };
   return (
     <div
@@ -138,6 +138,7 @@ const TaskCards = ({ task, colId }: { task?: Task; colId: string }) => {
                       priority: e.target.value as Task["priority"],
                     });
                   }}
+                  className="text-[14px] border-1 px-2 rounded-sm border-black text-black"
                 >
                   <option value="High">High</option>
                   <option value="Medium">Medium</option>

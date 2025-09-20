@@ -2,15 +2,26 @@ import { SortableContext } from "@dnd-kit/sortable";
 import BoardViewCol from "./components/BoardViewCol";
 import { useTaskContext } from "./context/TaskContext";
 import type { Column } from "./data/types";
-import { DndContext, closestCorners } from "@dnd-kit/core";
+import {
+  DndContext,
+  MouseSensor,
+  TouchSensor,
+  closestCorners,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+
+import { restrictToWindowEdges } from "@dnd-kit/modifiers";
 
 function App() {
   const { columns, moveTask, getTaskColumn } = useTaskContext();
-
+  const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
   return (
     <div className="base-wrapper relative">
       <h1 className="text-2xl">Board View</h1>
       <DndContext
+        sensors={sensors}
+        modifiers={[restrictToWindowEdges]}
         onDragEnd={(event) => {
           const { active, over } = event;
           if (!over) return;

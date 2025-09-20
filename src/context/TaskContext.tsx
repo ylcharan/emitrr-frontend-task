@@ -12,18 +12,15 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
   const setCols = (task: Task, taskId: string) => {
     setColumns((prevCols) =>
       prevCols.map((col) => {
-        if (col.id === taskId) {
-          return {
-            ...col,
-            tasks: col.tasks.map((t) => {
-              if (t.id === task.id) {
-                return { ...task };
-              }
-              return t;
-            }),
-          };
-        }
-        return col;
+        return {
+          ...col,
+          tasks: col.tasks.map((t) => {
+            if (t.id === taskId) {
+              return { ...task };
+            }
+            return t;
+          }),
+        };
       })
     );
   };
