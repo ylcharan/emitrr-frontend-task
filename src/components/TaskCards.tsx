@@ -40,6 +40,7 @@ const TaskCards = ({ task, colId }: { task?: Task; colId: string }) => {
       className={`bg-white p-4 rounded-md shadow-md cursor-pointer`}
       onClick={() => {
         if (!task) return;
+        if (isEditorOpen) return;
         navigate(`/task/${task?.id}`);
       }}
     >
