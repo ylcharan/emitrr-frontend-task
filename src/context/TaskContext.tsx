@@ -7,6 +7,18 @@ const TaskContext = createContext<TaskContextType | undefined>(undefined);
 export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
   const [columns, setColumns] = useState<Column[]>(dummyData);
 
+  const newId = () => {
+    const existingIds = columns.flatMap((col) => col.tasks.map((t) => t.id));
+    let maxId = 0;
+    for (const id of existingIds) {
+      const num = parseInt(id.replace("task-", ""), 10);
+      if (!isNaN(num) && num > maxId) {
+        maxId = num;
+      }
+    }
+    return `task-${maxId + 1}`;
+  };
+
   const getCols = () => columns;
 
   const setCols = (task: Task, taskId: string) => {
@@ -28,7 +40,9 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
   const addTask = (columnId: string, task: Task) => {
     setColumns((prev) =>
       prev.map((c) =>
-        c.id === columnId ? { ...c, tasks: [...c.tasks, task] } : c
+        c.id === columnId
+          ? { ...c, tasks: [{ ...task, id: newId() }, ...c.tasks] }
+          : c
       )
     );
   };

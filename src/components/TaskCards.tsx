@@ -107,7 +107,9 @@ const TaskCards = ({ task, colId }: { task?: Task; colId: string }) => {
                 />
               </div>
               <div className="flex flex-col gap-1 items-left mt-2">
-                <span className="text-[12px] text-black">description:</span>
+                <span className="text-[12px] text-black mr-auto">
+                  description:
+                </span>
                 <textarea
                   value={newTask?.description}
                   onChange={(e) => {
@@ -125,7 +127,7 @@ const TaskCards = ({ task, colId }: { task?: Task; colId: string }) => {
                     onChange={(e) =>
                       setNewTask({ ...newTask, dueDate: e.target.value })
                     }
-                    className="text-[14px] border-1 px-2 rounded-sm border-black text-black"
+                    className="text-[14px] border-1 px-2 rounded-sm border-black text-black mr-2"
                   />
                 </div>
                 <select
@@ -145,6 +147,7 @@ const TaskCards = ({ task, colId }: { task?: Task; colId: string }) => {
                   <option value="Low">Low</option>
                 </select>
               </div>
+
               <button
                 className="bg-blue-500 text-white w-full py-1 mt-3 rounded-sm cursor-pointer"
                 onClick={() => {
