@@ -5,11 +5,16 @@ import App from "./App.tsx";
 import { createBrowserRouter } from "react-router";
 import { RouterProvider } from "react-router/dom";
 import { TaskProvider } from "./context/TaskContext.tsx";
+import TaskDetails from "./pages/TaskDetails.tsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+  },
+  {
+    path: "/task/:taskId", // 👈 param route
+    element: <TaskDetails />,
   },
 ]);
 

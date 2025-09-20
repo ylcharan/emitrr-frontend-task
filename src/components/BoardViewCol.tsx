@@ -21,7 +21,7 @@ const BoardViewCol = ({ column }: { column: Column }) => {
   return (
     <div
       ref={setNodeRef}
-      className="flex flex-col gap-4 bg-[#F6F8FA] p-4 rounded-md"
+      className="flex flex-col gap-4 bg-[#F6F8FA] p-4 rounded-md min-h-screen"
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
@@ -141,15 +141,33 @@ const BoardViewCol = ({ column }: { column: Column }) => {
               />
             </div>
 
-            <button
-              className="bg-blue-500 text-white w-full py-1 mt-3 rounded-sm cursor-pointer"
-              onClick={() => {
-                addTask(column.id, newTask);
-                setIsAddingTask(false);
-              }}
-            >
-              Save
-            </button>
+            <div className="flex gap-2">
+              <button
+                className="bg-blue-500 text-white w-full py-1 mt-3 rounded-sm cursor-pointer"
+                onClick={() => {
+                  addTask(column.id, newTask);
+                  setIsAddingTask(false);
+                }}
+              >
+                Save
+              </button>
+              <button
+                className="bg-red-500 text-white w-full py-1 mt-3 rounded-sm cursor-pointer"
+                onClick={() => {
+                  setNewTask({
+                    id: "",
+                    title: "",
+                    description: "",
+                    createdBy: "",
+                    priority: "Low",
+                    dueDate: "",
+                  });
+                  setIsAddingTask(false);
+                }}
+              >
+                Discard
+              </button>
+            </div>
           </div>
         )}
         {/* <SortableContext items={column.tasks}> */}

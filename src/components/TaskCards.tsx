@@ -4,8 +4,10 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { useTaskContext } from "../context/TaskContext";
 import { useState } from "react";
+import { useNavigate } from "react-router";
 
 const TaskCards = ({ task, colId }: { task?: Task; colId: string }) => {
+  const navigate = useNavigate();
   const {
     attributes,
     listeners,
@@ -35,7 +37,11 @@ const TaskCards = ({ task, colId }: { task?: Task; colId: string }) => {
       ref={setNodeRef}
       style={style}
       {...attributes}
-      className={`bg-white p-4 rounded-md shadow-md`}
+      className={`bg-white p-4 rounded-md shadow-md cursor-pointer`}
+      onClick={() => {
+        if (!task) return;
+        navigate(`/task/${task?.id}`);
+      }}
     >
       {!task ? (
         <div className="p-4 border-2 border-dashed border-gray-300 text-gray-400 rounded-lg text-center cursor-default">
@@ -48,9 +54,10 @@ const TaskCards = ({ task, colId }: { task?: Task; colId: string }) => {
               <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
               {task?.createdBy}
             </span>
-            <div className="absolute right-0 top-0 flex items-center gap-2">
+            <div className="absolute right-0 top-0 flex items-center gap-2 z-[999999]">
               <button
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setIsEditorOpen(!isEditorOpen);
                 }}
                 className="cursor-pointer"
@@ -58,7 +65,9 @@ const TaskCards = ({ task, colId }: { task?: Task; colId: string }) => {
                 <SquarePen className="w-4 h-4 text-gray-400" />
               </button>
               <button
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
+
                   deleteTask(task.id);
                 }}
                 className="cursor-pointer"
