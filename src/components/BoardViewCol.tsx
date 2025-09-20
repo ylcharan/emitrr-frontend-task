@@ -1,10 +1,13 @@
-import { Ellipsis, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import TaskCards from "./TaskCards";
 import type { Column } from "../data/types";
 import { useDroppable } from "@dnd-kit/core";
+import { useState } from "react";
 
 const BoardViewCol = ({ column }: { column: Column }) => {
   const { setNodeRef } = useDroppable({ id: column.id });
+  const [sortBy, setSortBy] = useState<"date" | "priority" | "none">("none");
+
   return (
     <div
       ref={setNodeRef}
@@ -27,7 +30,33 @@ const BoardViewCol = ({ column }: { column: Column }) => {
           </span>
         </div>
         <div className="flex items-center gap-2">
-          <Ellipsis />
+          <span className="text-gray-900 text-[10px] uppercase">Sort by: </span>
+          <button
+            onClick={() => {
+              setSortBy("date");
+              column.tasks.sort((a, b) => a.dueDate.localeCompare(b.dueDate));
+              console.log("sorted by date", column.tasks);
+            }}
+            className={`${
+              sortBy === "date" ? "text-gray-900" : "text-gray-400"
+            } text-[10px] uppercase cursor-pointer `}
+          >
+            Date
+          </button>
+          <button
+            onClick={() => {
+              setSortBy("priority");
+              const priorityOrder = { High: 1, Medium: 2, Low: 3 };
+              column.tasks.sort(
+                (a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]
+              );
+            }}
+            className={`${
+              sortBy === "priority" ? "text-gray-900" : "text-gray-400"
+            } text-[10px] uppercase cursor-pointer`}
+          >
+            Priority
+          </button>
           <Plus />
         </div>
       </div>

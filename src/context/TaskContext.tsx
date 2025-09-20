@@ -7,6 +7,12 @@ const TaskContext = createContext<TaskContextType | undefined>(undefined);
 export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
   const [columns, setColumns] = useState<Column[]>(dummyData);
 
+  const getCols = () => columns;
+
+  const setCols = (cols: Column[]) => {
+    setColumns(cols);
+  };
+
   const addTask = (columnId: string, task: Task) => {
     setColumns((prev) =>
       prev.map((c) =>
@@ -56,16 +62,20 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
         if (!overId || overId.startsWith("col-")) {
           toCol.tasks.push(movedTask);
         } else {
-          let overIndex = toCol.tasks.findIndex((t) => t.id === overId);
+          const overIndex = toCol.tasks.findIndex((t) => t.id === overId);
 
           // if not found -> append
           if (overIndex === -1) {
             toCol.tasks.push(movedTask);
           } else {
             // adjustment for downward moves (because we already removed the item)
-            if (fromIndex < overIndex) overIndex = overIndex - 1;
             // place after the 'over' item to match expected UX
-            toCol.tasks.splice(overIndex + 1, 0, movedTask);
+            if (overIndex >= fromIndex) {
+              toCol.tasks.splice(overIndex + 1, 0, movedTask);
+            } else {
+              toCol.tasks.splice(overIndex, 0, movedTask);
+            }
+            // arrayMove(toCol.tasks, fromIndex, overIndex);
           }
         }
       } else {
@@ -79,7 +89,11 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
             toCol.tasks.push(movedTask);
           } else {
             // insert *before* the over item for cross-column (you can tweak to insert after)
-            toCol.tasks.splice(overIndex, 0, movedTask);
+            if (overIndex >= fromIndex) {
+              toCol.tasks.splice(overIndex + 1, 0, movedTask);
+            } else {
+              toCol.tasks.splice(overIndex, 0, movedTask);
+            }
           }
         }
       }
@@ -88,8 +102,25 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
     });
   };
 
+  const deleteTask = (taskId: string) => {
+    setColumns((prevCols) =>
+      prevCols.map((col) => ({
+        ...col,
+        tasks: col.tasks.filter((task) => task.id !== taskId),
+      }))
+    );
+  };
+
   const value = useMemo(
-    () => ({ columns, addTask, moveTask, getTaskColumn }),
+    () => ({
+      columns,
+      addTask,
+      moveTask,
+      getTaskColumn,
+      getCols,
+      setCols,
+      deleteTask,
+    }),
     [columns]
   );
 

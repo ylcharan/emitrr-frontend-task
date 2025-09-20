@@ -74,7 +74,7 @@ export const dummyData: Column[] = [
           "Initialize Next.js project with Tailwind and TanStack Query.",
         createdBy: "Grace",
         priority: "Low",
-        dueDate: "2025-09-15",
+        dueDate: "2025-10-15",
       },
       {
         id: "task-8",

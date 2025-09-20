@@ -8,7 +8,7 @@ function App() {
   const { columns, moveTask, getTaskColumn } = useTaskContext();
 
   return (
-    <div className="base-wrapper ">
+    <div className="base-wrapper relative">
       <h1 className="text-2xl">Board View</h1>
       <DndContext
         onDragEnd={(event) => {
