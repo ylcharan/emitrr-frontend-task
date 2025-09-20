@@ -1,3 +1,4 @@
+import { SortableContext } from "@dnd-kit/sortable";
 import BoardViewCol from "./components/BoardViewCol";
 import { useTaskContext } from "./context/TaskContext";
 import type { Column } from "./data/types";
@@ -12,21 +13,58 @@ function App() {
       <DndContext
         onDragEnd={(event) => {
           const { active, over } = event;
-          console.log(event);
-          if (active.id === over?.id) return;
-          moveTask(
-            getTaskColumn(columns, active.id as string),
-            active.id as string,
-            over?.id as string
-          );
+          if (!over) return;
+
+          const activeId = active.id as string;
+          const overId = over.id as string;
+          const fromColId = getTaskColumn(columns, active.id as string);
+          let toColId: string;
+          if (overId.startsWith("col-")) {
+            toColId = overId;
+          } else {
+            toColId = getTaskColumn(columns, overId);
+          }
+
+          if (activeId === overId) return;
+          console.log({ fromColId, toColId, activeId, overId });
+
+          moveTask(fromColId, toColId, activeId, overId);
+        }}
+        onDragOver={(event) => {
+          const { active, over } = event;
+
+          const activeId = active.id as string;
+          const overId = over?.id as string;
+          const fromColId = getTaskColumn(columns, activeId);
+          const toColId = getTaskColumn(columns, overId || "");
+          console.log({ fromColId, toColId, activeId, overId });
+          if (activeId === overId) return;
+
+          moveTask(fromColId, toColId, activeId, overId);
         }}
         collisionDetection={closestCorners}
       >
+        {/* <SortableContext
+          items={columns.map((col) => {
+            for (const task of col.tasks) {
+              return task.id;
+            }
+            return col.id;
+          })}
+        > */}
         <div className="grid grid-cols-3 gap-10 mt-10">
           {columns.map((column: Column) =>
-            column ? <BoardViewCol key={column.id} column={column} /> : null
+            column ? (
+              <SortableContext
+                key={column.id}
+                items={column.tasks.map((task) => task.id)}
+              >
+                <BoardViewCol key={column.id} column={column} />
+              </SortableContext>
+            ) : null
           )}
         </div>
+        {/* </SortableContext> */}
 
         {/* <div className="flex flex-col gap-4 bg-[#F6F8FA] p-4 rounded-md">
           <div className="flex items-center justify-between">
